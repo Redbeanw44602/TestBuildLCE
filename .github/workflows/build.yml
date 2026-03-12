@@ -13,12 +13,12 @@ jobs:
           git clone https://github.com/smartcmd/MinecraftConsoles.git
           cd MinecraftConsoles
           git checkout d26f70a0cb33b7410ae959a3597b53b5d3e5090f
-          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_GENERATOR_INSTANCE="C:/Program Files/Microsoft Visual Studio/2022/Enterprise"
-          cmake --build build --config Debug --target MinecraftClient
+          msbuild MinecraftConsoles.sln /p:Configuration=Debug /m
+          
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: client
           path: |
-            build/Debug
+            bin/Debug
