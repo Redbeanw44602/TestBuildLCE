@@ -10,7 +10,20 @@ jobs:
     steps:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
+        
+      - name: Install v143 toolset
+        shell: powershell
+        run: |
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+              -latest -products * -requires Microsoft.Component.MSBuild `
+              -property installationPath
       
+          & "$vsPath\Common7\IDE\CommonExtensions\Microsoft\VSI\vs_installer.exe" modify `
+              --installPath "$vsPath" `
+              --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+              --add Microsoft.VisualStudio.Component.VC.v143.x86.x64 `
+              --quiet --norestart
+        
       - name: Run
         run: |
           git clone https://github.com/smartcmd/MinecraftConsoles.git
