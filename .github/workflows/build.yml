@@ -23,7 +23,7 @@ jobs:
         with:
           name: client
           path: |
-            x64/Debug/*
+            MinecraftConsoles/x64/Debug
 
 #      - name: Setup tmate session
 #        if: failure()
