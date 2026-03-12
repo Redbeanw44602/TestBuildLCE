@@ -10,27 +10,13 @@ jobs:
     steps:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
-        
-      - name: Install v143 toolset
-        shell: powershell
-        run: |
-          $vsPath = & "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vswhere.exe" `
-              -latest -products * -requires Microsoft.Component.MSBuild `
-              -property installationPath
-      
-          & "$vsPath\Common7\IDE\CommonExtensions\Microsoft\VSI\vs_installer.exe" modify `
-              --installPath "$vsPath" `
-              --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
-              --add Microsoft.VisualStudio.Component.VC.v143.x86.x64 `
-              --quiet --norestart
-        
+
       - name: Run
         run: |
           git clone https://github.com/smartcmd/MinecraftConsoles.git
           cd MinecraftConsoles
           git checkout d26f70a0cb33b7410ae959a3597b53b5d3e5090f
           msbuild MinecraftConsoles.sln /p:Configuration=Debug /m
-          
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -38,3 +24,9 @@ jobs:
           name: client
           path: |
             bin/Debug
+
+      - name: Setup tmate session
+        if: failure()
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
